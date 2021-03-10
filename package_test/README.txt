@@ -8,7 +8,7 @@ of the same package.
 
 Abstact:
   1. There are two packages nameed 'arithmetic' and 'arithmetic2', which shows how to retrieve all objects 
-     belonged to the package and is used for syntext experiment, respectively.
+     belonged to the package and is used for syntax experiment, respectively.
      
   2. The main function is showed in __init__.py.
   
