@@ -4,13 +4,22 @@
 
 '''
 ========================
-    使用方法
+      使用方法
 ========================
 1. 建立物件
   parser = Vet_yamol_parser(yamol_raw_html_string, path)
 
 2. 執行分析並回傳路徑
   result_path = parser()
+------------------------
+  
+========================
+    關於檔案路徑
+========================
+分析的過程會把資料存下來
+分成 json, 圖檔, discussion.html
+後兩者會放在 static 的資料夾
+------------------------
 '''
 
 from os.path import isabs, isfile, isdir, basename, dirname, join
@@ -30,7 +39,7 @@ class Vet_yamol_parser():
 
     self.static_dir = join(dirname(path), 'static')
 
-    self.discussion_path = join(self.static_dir, 'discussion.html')
+    self.discussion_path = join(self.static_dir, basename(path).replace('.json', '') + '_discussion.html')
 
 
     # 建立 json 檔的佔存容器
