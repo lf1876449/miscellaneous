@@ -13,6 +13,12 @@
   result_path = parser()
 ------------------------
   
+quick parse in a dir: 
+
+              quick_yamol_parser(html_dir, parsed_dir)
+  
+------------------------
+  
 ========================
     關於檔案路徑
 ========================
