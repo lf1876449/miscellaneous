@@ -188,9 +188,8 @@ class Vet_yamol_parser():
       print(f'已建立 {path} 於當前工作資料夾')
       return path
 
-
+        
   def _extract_discussion(self, bstag, qid, doc_path):
-
     if (not isdir(dirname(doc_path))) and (dirname(doc_path) != ''):
       makedirs(dirname(doc_path))
 
@@ -199,25 +198,31 @@ class Vet_yamol_parser():
           img{max-width:80%; height: auto;}
         </style>
     '''
-    re_pattern = r'<span class="comment">(.*)<a href="support_open.php'
+    re_pattern = r'<span class="comment">(.*)<a href="support_open.php\?extra_type'
     addition_filter = r'<label class="badge badge-danger">已解鎖</label>'
+    addition_filter2 = r'style="display:none"'
+    re_pattern2 = r'查看完整內容</a></div>(.*div style="text-align:right"><i>)'
     div_open = r'<div style="border: 2px solid red; border-radius: 5px; border-color: gray; padding: 25px 25px 25px 25px; margin-top: 25px;width: 1000px;">'
     
     discussion_list = bstag.select('[class="well itemcomment"] div[style*="min-height"]')
-    #print(discussion_list)
 
     with open(doc_path, 'a') as f:
       f.write(img_size_control)
 
 
     for i, e in enumerate(discussion_list):
-      re_result = re.search(re_pattern ,str(e), re.DOTALL)
-      target = re_result.group(1).replace(addition_filter, '')
+      if '查看完整' in str(e):
+        re_result = re.search(re_pattern2 ,str(e), re.DOTALL)
+        target = re_result.group(1).replace(addition_filter2, '')
+      else:
+        re_result = re.search(re_pattern ,str(e), re.DOTALL)
+        target = re_result.group(1).replace(addition_filter, '')
 
       result = div_open + f'<h1>{qid}-{i+1}</h1>' + target + '</div>'*2
 
-      with open(doc_path, 'ab') as f:
-        f.write(result.encode('utf-8'))
+      with open(doc_path, 'a') as f:
+        f.write(result)
+
 
 
 def quick_yamol_parser(html_dir, parsed_dir):
