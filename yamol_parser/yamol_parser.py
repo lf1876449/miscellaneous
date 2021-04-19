@@ -249,9 +249,11 @@ class Vet_yamol_parser():
       f.write(img_size_control)
 
     for i, e in enumerate(note_list):
-      re_result = re.search(re_pattern ,str(e), re.DOTALL)
-      target = re_result.group(1)
-      result = div_open.replace('<class>', str(qid) + '-' + str(i+1)) + f'<h1>{qid}-{i+1}</h1>' + target + '</div>'*2
+      try:
+        re_result = re.search(re_pattern ,str(e), re.DOTALL)
+        target = re_result.group(1)
+        result = div_open.replace('<class>', str(qid) + '-' + str(i+1)) + f'<h1>{qid}-{i+1}</h1>' + target + '</div>'*2
+      except: print(f'分析 note 第 {str(qid)}-{str(i+1)} 出問題')
 
       with open(doc_path, 'a', encoding = 'utf-8') as f:
         f.write(result)
