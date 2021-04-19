@@ -63,7 +63,10 @@ class Vet_yamol_parser():
       qid, question, choices = self._get_choice_question(bstag)
 
       # 取得答案
-      ans = self._get_ans(bstag)
+      try:
+        ans = self._get_ans(bstag)
+      except:
+        print(f'分析第{qid}題時發生問題')
 
       # 儲存圖片並回傳路徑
       img_path_list = self._img_extract(bstag, qid, self.static_dir)
@@ -307,7 +310,9 @@ def quick_yamol_parser(html_dir, parsed_dir):
   #print(html_path_list)
   #print(parsed_path_list)
   
+  # rp == raw path
   for rp, pp in zip(html_path_list, parsed_path_list):
     with open(rp, 'rb') as f:
+      print(f'開始分析 {basename(rp)}')
       Vet_yamol_parser(f.read().decode('utf-8'), pp)()
   
