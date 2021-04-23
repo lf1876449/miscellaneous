@@ -159,7 +159,9 @@ class Vet_yamol_parser():
     if isinstance(number, int) or isinstance(number, float):
       number = str(int(number))
 
-    if number != question[:question.find('.')]:
+    #print(number)
+    #print(re.search(r'(\d+)[.]', question))
+    if number != re.search(r'(\d+)[.]', question).group(1):
       raise ValueError('Wrong question number!')
   
     if len(choices) != 4:
@@ -169,12 +171,22 @@ class Vet_yamol_parser():
         print('Warning: %s'%w)
 
     if not any([answer in choice[:3] for choice in choices]):
-      print(number)
-      print(choices)
+      print('='*15)
+      print('出現例外')
+      print('-'*15)
+      print('題目:', number)
+      print('原始選項:', choices)
+      print('答案:', answer)
       try:
         raise ValueError('No such answer!')
       except ValueError as e:
         print(e)
+        if 'e' in answer.lower():
+          choices.append(choices[3][choices[3].find('(E)'):])
+          choices[3] = choices[3][:choices[3].find('(E)')]
+          print('修改後選項: ', choices)
+        print('='*15)
+        
   
     result =  {number : [question, choices, answer]}
 
