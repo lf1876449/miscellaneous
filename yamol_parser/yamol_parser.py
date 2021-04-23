@@ -106,7 +106,9 @@ class Vet_yamol_parser():
       choices.append(temp_choices[:i].strip())
       temp_choices = temp_choices[i:]
     choices.append(temp_choices)
-    qid = question[:question.find('.')]
+    qid_re = re.search(r'(\d+)[.]', question)
+    #print(qid_re.group(1))
+    qid = qid_re.group(1)
     
     #若 choices 全空，則代表選項全是圖片
     if not all(choices):
@@ -219,18 +221,19 @@ class Vet_yamol_parser():
     addition_filter2 = r'style="display:none"'
     re_pattern2 = r'查看完整內容</a></div>(.*div style="text-align:right"><i>)'
     div_open = r'<div style="border: 2px solid red; border-radius: 5px; border-color: gray; padding: 25px 25px 25px 25px; margin-top: 25px;" class=<class>>'
-    
+    if str(qid) == '61':print(bstag)
     discussion_list = bstag.select('[class="well itemcomment"] div[style*="min-height"]')
 
     with open(doc_path, 'a', encoding = 'utf-8') as f:
       f.write(img_size_control)
 
-
+    if str(qid) == '61':print(discussion_list)
     for i, e in enumerate(discussion_list):
       if '查看完整' in str(e):
         re_result = re.search(re_pattern2 ,str(e), re.DOTALL)
         target = re_result.group(1).replace(addition_filter2, '')
       else:
+        if str(qid) == '61':print(str(e))
         re_result = re.search(re_pattern ,str(e), re.DOTALL)
         target = re_result.group(1).replace(addition_filter, '')
 
@@ -238,6 +241,7 @@ class Vet_yamol_parser():
 
       with open(doc_path, 'a', encoding = 'utf-8') as f:
         f.write(result)
+
 
 
   def _extract_note(self, bstag, qid, doc_path):
